@@ -1,4 +1,9 @@
 import customtkinter
+import sqlite3
+from tkinter import *
+from tkinter import messagebox
+
+
 
 customtkinter.set_appearance_mode("dark")
 # customtkinter.set_default_color_theme("dark-blue")
@@ -7,6 +12,14 @@ janela = customtkinter.CTk()
 janela.geometry("500x300")
 janela.title("Cadastro de Clientes")
 
+conn = sqlite3.connect('data.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+               CREATE TABLE IF NOT EXISTS users(
+               username TEXT NOT NULL,
+               password TEXT NOT NULL)'''
+               )
 
 logins = []
 senhas = []
@@ -102,3 +115,8 @@ button2.pack(pady=20)
 
 
 janela.mainloop()
+
+import os
+
+db_path = os.path.abspath('data.db')
+print("Caminho completo para o arquivo 'data.db':", db_path)
