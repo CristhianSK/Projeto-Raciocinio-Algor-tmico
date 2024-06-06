@@ -20,7 +20,7 @@ cursor.execute("""
                CREATE TABLE IF NOT EXISTS usuarios (
                usuario TEXT NOT NULL,
                senha TEXT NOT NULL,
-               funcionario TEXT NOT NULL)""")
+               funcionario INTEGER NOT NULL)""")
 
 
 def checkbox_event():
@@ -31,14 +31,13 @@ def cadastro():
     usuario = usuario_entry.get()
     senha = senha_entry.get()
     is_funcionario = funcionario.get()
-    global is_funcionario
     print(is_funcionario)
     if usuario != "" and senha != "":
         cursor.execute("SELECT usuario FROM usuarios WHERE usuario=?", [usuario])
         if cursor.fetchone() is not None:
             messagebox.showerror("Erro", "Usuario ja cadastrado.")
         else:
-            cursor.execute("INSERT INTO usuarios VALUES(?, ?)", [usuario, senha])
+            cursor.execute("INSERT INTO usuarios VALUES(?, ?, ?)", [usuario, senha, 1 if is_funcionario == "on" else 0])
             conn.commit()
             messagebox.showinfo("Sucesso","Conta criada.")
     else:
@@ -48,14 +47,16 @@ def logar_conta():
     usuario = usuario_entry2.get()
     senha = senha_entry2.get()
     if usuario != "" and senha != "":
-        cursor.execute("SELECT senha FROM usuarios WHERE usuario=?", [usuario])
+        cursor.execute("SELECT senha, funcionario FROM usuarios WHERE usuario=?", [usuario])
         result = cursor.fetchone()
         if result:
             if senha == result[0]:
                 messagebox.showinfo("Sucesso","Logado com sucesso.")
-                if is_funcionario == "off":
+                print(result)
+                print("AAAAAAAAAAAAAAAAAAAA")
+                if result[1] == 0:
                     new()
-                elif is_funcionario == "on":
+                else:
                     news()
             else:
                 messagebox.showerror("Erro","Senha invalida.")
