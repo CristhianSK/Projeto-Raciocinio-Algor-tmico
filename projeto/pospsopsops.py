@@ -17,10 +17,11 @@ conn = sqlite3.connect("data2.db")
 cursor = conn.cursor()
 
 cursor.execute("""
-               CREATE TABLE IF NOT EXISTS usuarios(
+               CREATE TABLE IF NOT EXISTS usuarios (
                usuario TEXT NOT NULL,
-               senha TEXT NOT NULL
-               funcionario CHECKBOX NOT NULL)""")
+               senha TEXT NOT NULL,
+               funcionario TEXT NOT NULL)""")
+
 
 def checkbox_event():
     print("checkbox toggled, current value:", funcionario.get())
@@ -29,6 +30,9 @@ def checkbox_event():
 def cadastro():
     usuario = usuario_entry.get()
     senha = senha_entry.get()
+    is_funcionario = funcionario.get()
+    global is_funcionario
+    print(is_funcionario)
     if usuario != "" and senha != "":
         cursor.execute("SELECT usuario FROM usuarios WHERE usuario=?", [usuario])
         if cursor.fetchone() is not None:
@@ -49,9 +53,9 @@ def logar_conta():
         if result:
             if senha == result[0]:
                 messagebox.showinfo("Sucesso","Logado com sucesso.")
-                if funcionario == "off":
+                if is_funcionario == "off":
                     new()
-                elif funcionario == "on":
+                elif is_funcionario == "on":
                     news()
             else:
                 messagebox.showerror("Erro","Senha invalida.")
@@ -151,7 +155,7 @@ def login():
     senha_entry2 = customtkinter.CTkEntry(frame2, font=font2,show="*", text_color="#fff", fg_color="#001a2e", bg_color="#121111", border_color="#004780", border_width=3,placeholder_text="Usuario",placeholder_text_color="#a3a3a3", width=200, height=50)
     senha_entry2.place(x=230,y=150)
 
-    login_botao2 = customtkinter.CTkButton(frame2,font=font2,command=logar_conta,text_color="#00bf77",text="Login",fg_color="#001220",hover_color="#006e44",bg_color="#121111",cursor="hand2",width=40)
+    login_botao2 = customtkinter.CTkButton(frame2,font=font2,command=logar_conta , text_color="#fff",text="Login",fg_color="#00965d",hover_color="#006e44",bg_color="#121111",cursor="hand2",corner_radius=5,width=40)
     login_botao2.place(x=230, y=220)
 
 frame1 = customtkinter.CTkFrame(app,bg_color="#001220",fg_color="#001220", width=470,height=360)
